@@ -15,17 +15,29 @@ function getComputerChoice() {
     return choices[randomNumber];
 }
 
-function getPlayerChoice() {
-    while (true) {
-        let playerSelection = prompt("Choose a move:");
-        playerSelection = titleCase(playerSelection);
-        let psLowerCase = playerSelection.toLowerCase();
-        let incCheck = options.includes(psLowerCase);
-        if (incCheck === true) {
-            return playerSelection;
-        }
-    }
-}
+let gameplay = document.getElementsByClassName("choice");
+
+let computerScore = 0;
+let playerScore = 0;
+let gameCounter = 0;
+
+let rock = document.getElementById("rock");
+rock.addEventListener("click", function getPlayerChoice() {
+    let playerSelection = "Rock";
+    game(playerSelection);
+})
+
+let paper = document.getElementById("paper");
+paper.addEventListener("click", function getPlayerChoice() {
+    let playerSelection = "Paper";
+    game(playerSelection);
+})
+
+let scissors = document.getElementById("scissors");
+scissors.addEventListener("click", function getPlayerChoice() {
+    let playerSelection = "Scissors";
+    game(playerSelection);
+})
 
 function titleCase(str) {
     return str.replace(
@@ -62,40 +74,49 @@ function playRound(computerSelection, playerSelection) {
         return "Computer";
     }
     else if (computerSelection == "Paper" && playerSelection == "Scissors") {
-        return "Player";getComputerChoice
+        return "Player";
     }
 }
 
-function game() {
-    let computerScore = 0;
-    let playerScore = 0;
-    for (let i = 0; i < 5; i++) {
+
+function game(playerSelection) {
+    if (gameCounter < 5) {
+        console.log(gameCounter);
         computerSelection = getComputerChoice();
-        playerSelection = getPlayerChoice();
-        roundNumber = parseInt(i) + 1;
+        roundNumber = parseInt(gameCounter) + 1;
         winner = playRound(computerSelection, playerSelection);
         console.log("Computer move is " + computerSelection + ". Player move is " + playerSelection + ".");
         if (winner == "Computer") {
             console.log("Round " + roundNumber + ": Computer Wins!");
             computerScore++;
+            const displayComputerScore = document.getElementById('realcomputerscore');
+            displayComputerScore.textContent = computerScore;
         }
         else if (winner == "Player") {
             console.log("Round " + roundNumber + ": Player Wins!");
             playerScore++;
+            const displayPlayerScore = document.getElementById('realplayerscore');
+            displayPlayerScore.textContent = playerScore;
         }
         else {
             console.log("Round " + roundNumber + ": It's a tie!");
         }
+        gameCounter++;
     }
-    if (computerScore > playerScore) {
-        console.log("COMPUTER IS THE FINAL WINNER!!!");
-    }
-    else if (playerScore > computerScore) {
-        console.log("PLAYER IS THE FINAL WINNER!!!");
-    }
-    else {
-        console.log("IT'S A TIE!!!");
+    if (gameCounter >= 5) {
+        gameCounter = 0;
+        const winner = document.getElementById("finalwinner");
+        if (computerScore > playerScore) {
+            console.log("COMPUTER IS THE FINAL WINNER!!!");
+            winner.textContent= "Computer";
+        }
+        else if (playerScore > computerScore) {
+            console.log("PLAYER IS THE FINAL WINNER!!!");
+            winner.textContent = "Player";
+        }
+        else {
+            console.log("IT'S A TIE!!!");
+            winner.textContent = "Tie";
+        }
     }
 }
-
-game();
